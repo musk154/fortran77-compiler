@@ -1,7 +1,6 @@
 """
 tests/test_semantic.py — Testes unitários da análise semântica
 
-O que estamos a testar:
     - Construção da tabela de símbolos
     - Resolução de ambiguidade FuncCall vs ArrayRef
     - Validação de labels em GOTO e DO

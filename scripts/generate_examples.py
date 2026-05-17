@@ -1,9 +1,3 @@
-"""Gerar ficheiros .vm para os exemplos em examples/ usando o pipeline.
-
-Este script lê todos os ficheiros `.f` em `examples/`, os compila
-com o pipeline lexer->parser->semantic->codegen e grava ficheiros `.vm`
-com o mesmo nome base.
-"""
 from pathlib import Path
 import sys
 

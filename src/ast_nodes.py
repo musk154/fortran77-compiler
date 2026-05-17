@@ -1,6 +1,4 @@
 """
-Nós da AST (Abstract Syntax Tree) para Fortran 77.
-
 Cada classe representa um tipo de construção da linguagem.
 Usamos dataclasses para simplicidade e __repr__ automático (útil no debug).
 """

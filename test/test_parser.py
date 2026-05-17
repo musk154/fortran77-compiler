@@ -1,14 +1,10 @@
 """
 tests/test_parser.py — Testes unitarios do parser
 
-O que estamos a testar NESTA FASE:
-		O parser recebe tokens do lexer e constroi a AST (nodos em ast_nodes.py).
-		Estes testes verificam que cada construcao sintatica gera o no correto e
-		que a estrutura (campos e hierarquia) esta certa.
+	O parser recebe tokens do lexer e constroi a AST (nodos em ast_nodes.py).
+	Estes testes verificam que cada construcao sintatica gera o no correto e
+	que a estrutura (campos e hierarquia) esta certa.
 
-Nota importante:
-		Ha limitacoes conhecidas no parser atual (ver xfail). Os testes assinalam
-		esses pontos para tornar o problema visivel sem quebrar a suite inteira.
 """
 
 import ast
@@ -56,9 +52,9 @@ def parse_with_semantic(source: str):
 
 class TestProgramRoot:
 		"""
-		O que testamos: que o parser devolve um Program com name/decls/body.
+		o parser devolve um Program com name/decls/body.
 
-		Por que: Program e a raiz da AST. Se este no estiver errado, todo o resto
+		Program e a raiz da AST. Se este no estiver errado, todo o resto
 		fica inconsistente.
 		"""
 
@@ -73,10 +69,9 @@ class TestProgramRoot:
 # ─── 2. Declaracoes ─────────────────────────────────────────────────────────
 
 class TestDeclarations:
-		"""
-		O que testamos: VarDecl e a lista de nomes declarados.
+		""" VarDecl e a lista de nomes declarados.
 
-		Por que: as declaracoes alimentam a tabela de simbolos. Um erro aqui quebra
+		as declaracoes alimentam a tabela de simbolos. Um erro aqui quebra
 		a analise semantica.
 		"""
 
@@ -98,9 +93,9 @@ END
 
 class TestAssignments:
 		"""
-		O que testamos: Assign com target e value.
+		 Assign com target e value.
 
-		Por que: atribuicao e a instrucao mais comum; garante que IDs e literais
+		atribuicao e a instrucao mais comum; garante que IDs e literais
 		geram os nos certos.
 		"""
 
@@ -149,9 +144,9 @@ END
 
 class TestExpressions:
 		"""
-		O que testamos: BinOp, UnaryOp, precedencia e literais.
+		BinOp, UnaryOp, precedencia e literais.
 
-		Por que: a AST precisa refletir a precedencia correta para gerar codigo
+		a AST precisa refletir a precedencia correta para gerar codigo
 		correto (ex: 1 + 2 * 3 nao pode virar (1 + 2) * 3).
 		"""
 
@@ -224,9 +219,9 @@ END
 
 class TestIfThenElse:
 		"""
-		O que testamos: IfThen com e sem ELSE.
+		IfThen com e sem ELSE.
 
-		Por que: estruturas de controlo precisam manter os blocos then/else
+		estruturas de controlo precisam manter os blocos then/else
 		separados para a geracao de codigo.
 		"""
 
@@ -267,9 +262,9 @@ END
 
 class TestIOStatements:
 		"""
-		O que testamos: PrintStmt e ReadStmt com o formato '*'.
+		PrintStmt e ReadStmt com o formato '*'.
 
-		Por que: PRINT/READ sao comuns nos exemplos e exercicios. O parser precisa
+		PRINT/READ sao comuns nos exemplos e exercicios. O parser precisa
 		tratar o '*' como formato e nao como operador aritmetico.
 		"""
 
@@ -301,9 +296,7 @@ END
 
 class TestLabelsAndGoto:
 		"""
-		O que testamos: LabeledStmt, Continue e GotoStmt.
-
-		Por que: labels sao essenciais no Fortran 77 (DO e GOTO). O parser precisa
+		labels sao essenciais no Fortran 77 (DO e GOTO). O parser precisa
 		manter o numero do label ligado a instrucao correta.
 		"""
 
@@ -335,9 +328,9 @@ END
 
 class TestDoLoop:
 		"""
-		O que testamos: DoLoop e os campos base (label, var, start, stop, step).
+		DoLoop e os campos base (label, var, start, stop, step).
 
-		Por que: o parser atual cria DoLoop sem corpo. Este teste valida a parte
+		o parser atual cria DoLoop sem corpo. Este teste valida a parte
 		que ja existe hoje e deixa o problema do corpo em xfail separado.
 		"""
 
@@ -363,9 +356,9 @@ END
 
 class TestCallStmt:
 		"""
-		O que testamos: CallStmt com e sem argumentos.
+		CallStmt com e sem argumentos.
 
-		Por que: CALL e uma instrucao distinta de FuncCall (expressao). E preciso
+		CALL e uma instrucao distinta de FuncCall (expressao). E preciso
 		garantir que o parser separa corretamente estes casos.
 		"""
 

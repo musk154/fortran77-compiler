@@ -1,9 +1,5 @@
 """
-Geração de código para a EWVM (Engenharia Web Virtual Machine).
-
-Este módulo traduz a AST produzida pela análise semântica em instruções
-da máquina virtual de pilha, seguindo o manual em https://ewvm.epl.di.uminho.pt/manual
-
+Gerador de código para EWVM (Emulated WebAssembly Virtual Machine).
 Organização:
   - CodeGen: classe principal que percorre a AST e emite código
   - Tabela de offsets para variáveis locais e globais
@@ -32,8 +28,6 @@ class VariableInfo:
 
 class CodeGen:
     """
-    Gerador de código para EWVM.
-
     A máquina virtual usa um modelo de pilha com:
     - Operand stack: para valores e cálculos
     - Call stack: para retornos de funções
@@ -431,12 +425,12 @@ class CodeGen:
     def _generate_call(self, call_stmt: CallStmt) -> None:
         """Gera código para CALL (chamada de subrotina)."""
         # Esta é uma operação avançada que requer suporte a subprogramas
-        # Por enquanto, deixamos como não implementado
+        # Deixamos como não implementado
         raise NotImplementedError("CALL ainda não está implementado no gerador de código")
 
     def _generate_func_call(self, func_call: FuncCall) -> None:
         """Gera código para chamadas de função (intrínsecas ou externas)."""
-        # Para agora, apenas funções intrínsecas simples
+        # Apenas funções intrínsecas simples
         INTRINSICS = {
             'MOD': 'MOD',
             'ABS': 'ABS',

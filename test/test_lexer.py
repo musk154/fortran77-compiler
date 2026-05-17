@@ -1,15 +1,6 @@
 """
 tests/test_lexer.py — Testes unitários do analisador léxico
 
-O que estamos a testar NESTA FASE:
-    O lexer é responsável por uma única coisa: converter uma sequência de
-    caracteres numa sequência de tokens. Os testes verificam, categoria a
-    categoria, que essa conversão é correta.
-
-    Não testamos aqui se o programa Fortran é sintaticamente válido — isso
-    é responsabilidade do parser (fase seguinte). O lexer não tem noção de
-    "instrução", "expressão" ou "bloco"; apenas reconhece padrões.
-
 Estrutura dos testes:
     1. Palavras-chave         — são identificadas e separadas de IDs normais
     2. Case-insensitivity     — Fortran não distingue maiúsculas de minúsculas
@@ -62,7 +53,7 @@ class TestKeywords:
     O que testamos: que cada palavra reservada do Fortran 77 gera o tipo de
     token correto e não é tratada como um identificador genérico (ID).
 
-    Porquê: se uma palavra-chave fosse tokenizada como ID, o parser não
+    se uma palavra-chave fosse tokenizada como ID, o parser não
     conseguiria reconhecer estruturas como 'PROGRAM' ou 'IF'.
     """
 
@@ -105,10 +96,7 @@ class TestKeywords:
 
 class TestCaseInsensitivity:
     """
-    O que testamos: que o lexer trata 'program', 'Program' e 'PROGRAM' de
-    forma idêntica — gerando sempre o mesmo tipo de token com valor em uppercase.
-
-    Porquê: a especificação ANSI do Fortran 77 define a linguagem como
+    a especificação ANSI do Fortran 77 define a linguagem como
     case-insensitive. Normalizar para uppercase no lexer significa que o parser
     e o resto do compilador nunca precisam de se preocupar com capitalização.
     """
@@ -131,10 +119,7 @@ class TestCaseInsensitivity:
 
 class TestIdentifiers:
     """
-    O que testamos: que identificadores (nomes de variáveis, funções, etc.)
-    são reconhecidos corretamente e normalizados para uppercase.
-
-    Porquê: em Fortran, 'n', 'N' e 'N' são a mesma variável. Normalizar no
+    em Fortran, 'n', 'N' e 'N' são a mesma variável. Normalizar no
     lexer simplifica todas as fases seguintes.
     """
 
@@ -162,10 +147,7 @@ class TestIdentifiers:
 
 class TestIntLiterals:
     """
-    O que testamos: que sequências de dígitos geram INT_LIT com o valor
-    Python correto (int, não string).
-
-    Porquê: o parser e o gerador de código vão usar estes valores diretamente
+    o parser e o gerador de código vão usar estes valores diretamente
     em cálculos; ter strings obrigaria a conversões manuais em todo o lado.
     """
 
@@ -191,10 +173,7 @@ class TestIntLiterals:
 
 class TestRealLiterals:
     """
-    O que testamos: que números com ponto decimal ou notação científica geram
-    REAL_LIT com o valor float Python correto.
-
-    Porquê: Fortran distingue INTEGER de REAL na declaração de variáveis;
+    Fortran distingue INTEGER de REAL na declaração de variáveis;
     a análise semântica precisa de saber o tipo de cada literal.
     Notação científica (1E3, 3.14E-2) é comum em programas científicos.
     """
@@ -240,10 +219,7 @@ class TestRealLiterals:
 
 class TestStringLiterals:
     """
-    O que testamos: que strings delimitadas por aspas simples geram STRING_LIT
-    com o valor sem as aspas.
-
-    Porquê: ao remover os delimitadores no lexer, o parser e o gerador de
+    ao remover os delimitadores no lexer, o parser e o gerador de
     código recebem sempre o conteúdo puro — consistente com a semântica do
     Fortran onde as aspas são apenas delimitadores, não parte do valor.
     """
@@ -269,10 +245,7 @@ class TestStringLiterals:
 
 class TestBoolLiterals:
     """
-    O que testamos: que .TRUE. e .FALSE. geram BOOL_LIT com valores bool
-    Python (True/False), em qualquer capitalização.
-
-    Porquê: converter para bool Python no lexer simplifica a análise semântica
+   converter para bool Python no lexer simplifica a análise semântica
     e a geração de código — não é necessário comparar strings ".TRUE." em
     nenhum outro sítio do compilador.
     """
@@ -299,10 +272,7 @@ class TestBoolLiterals:
 
 class TestArithmeticOperators:
     """
-    O que testamos: que cada operador aritmético gera o token correto,
-    e que '**' (potência) é reconhecido como POWER e não como dois STAR.
-
-    Porquê: a distinção POWER vs STAR é crítica para a precedência de
+    a distinção POWER vs STAR é crítica para a precedência de
     operadores no parser. Se '**' gerasse dois STAR, a gramática da
     expressão 'A**B' seria analisada incorretamente.
     """
@@ -341,10 +311,7 @@ class TestArithmeticOperators:
 
 class TestRelationalOperators:
     """
-    O que testamos: que cada operador relacional Fortran (.GT., .LT., etc.)
-    gera o tipo de token correto.
-
-    Porquê: os operadores relacionais em Fortran têm sintaxe única (ponto-
+    os operadores relacionais em Fortran têm sintaxe única (ponto-
     operador-ponto) e precisam de ser distinguidos entre si para que o parser
     possa construir expressões booleanas corretamente.
     """
@@ -380,9 +347,7 @@ class TestRelationalOperators:
 
 class TestLogicalOperators:
     """
-    O que testamos: que .AND., .OR. e .NOT. geram os tokens AND, OR, NOT.
-
-    Porquê: estes operadores são usados em condições compostas (ex: IF com
+    estes operadores são usados em condições compostas (ex: IF com
     múltiplas condições) e precisam de tipos próprios para a gramática do parser.
     """
 
@@ -404,9 +369,7 @@ class TestLogicalOperators:
 
 class TestPunctuation:
     """
-    O que testamos: parênteses, vírgula, igual e dois pontos.
-
-    Porquê: estes tokens são usados em chamadas de função, declarações,
+    estes tokens são usados em chamadas de função, declarações,
     atribuições e slices de arrays — aparecem em quase todas as construções.
     """
 
@@ -435,10 +398,7 @@ class TestPunctuation:
 
 class TestComments:
     """
-    O que testamos: que comentários com '!' não geram tokens — são descartados
-    silenciosamente pelo lexer.
-
-    Porquê: o parser nunca deve ver tokens de comentário. Se gerassem tokens,
+    O parser nunca deve ver tokens de comentário. Se gerassem tokens,
     teríamos de adicionar regras de comentário em toda a gramática.
     """
 
@@ -464,10 +424,7 @@ class TestComments:
 
 class TestLineNumbers:
     """
-    O que testamos: que o lexer actualiza lineno correctamente ao encontrar
-    newlines, e que os tokens gerados têm o número de linha certo.
-
-    Porquê: mensagens de erro do compilador precisam de indicar a linha do
+    mensagens de erro do compilador precisam de indicar a linha do
     problema. Um lineno errado tornaria o compilador difícil de usar.
     """
 
@@ -496,11 +453,7 @@ class TestLineNumbers:
 
 class TestFullPrograms:
     """
-    O que testamos: que os programas Fortran de exemplo do enunciado são
-    tokenizados sem erros e produzem a sequência de tipos esperada nas
-    partes críticas.
-
-    Porquê: estes são os programas que o compilador deve processar
+    estes são os programas que o compilador deve processar
     corretamente para aprovação. Usá-los como testes de integração do
     lexer garante que não há regressões ao modificar as regras.
 

@@ -146,10 +146,6 @@ def p_do_stmt(p):
     # Abordagem simples: recolhemos tudo até ao labeled CONTINUE.
     p[0] = DoLoop(label=p[2], var=p[3], start=p[5], stop=p[7], step=step, body=[])
 
-# Nota: uma abordagem mais robusta é fazer um pré-processamento que agrupa
-# as instruções entre DO e o CONTINUE correspondente antes de passar ao parser.
-# Para a entrega mínima, aceita-se que o body seja resolvido na análise semântica.
-
 # ─── GOTO ─────────────────────────────────────────────────────────────────────
 
 def p_goto_stmt(p):

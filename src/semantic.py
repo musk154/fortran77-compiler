@@ -1,25 +1,9 @@
 """
 Análise semântica para Fortran 77.
 
-Responsabilidades desta fase:
-  1. Construir a tabela de símbolos a partir das declarações (VarDecl).
-  2. Resolver a ambiguidade FuncCall vs ArrayRef: qualquer FuncCall cujo
-     nome esteja declarado como array na tabela de símbolos é reescrito
-     para ArrayRef. Esta é a razão pela qual a tabela de símbolos tem de
-     existir antes desta passagem — é exactamente o que o parser não
-     conseguia fazer sozinho.
-  3. Verificar usos de variáveis não declaradas (aviso, não erro fatal,
-     porque Fortran 77 tem tipagem implícita opcional — I-N são INTEGER
-     por omissão — mas nesta implementação exigimos declaração explícita).
-  4. Verificar que os labels referenciados em GOTO existem no programa.
-  5. Verificar que variáveis de controlo de DO são INTEGER.
-
-Design — padrão Visitor:
   A AST é percorrida por um SemanticVisitor que despacha cada nó para o
   método visit_<NomeDoNó>. Isto mantém a lógica de análise completamente
-  separada das dataclasses da AST, que ficam inalteradas. É o padrão
-  standard para esta fase em compiladores escritos em Python (cf. CPython
-  ast.NodeVisitor).
+  separada das dataclasses da AST, que ficam inalteradas.
 
   Os métodos visit_* devolvem o nó (eventualmente reescrito). Assim, a
   chamada visit(node) substitui o nó original pelo nó corrigido na AST,
@@ -61,9 +45,6 @@ class SymbolTable:
     Tabela de símbolos para uma unidade de programa (PROGRAM, FUNCTION ou
     SUBROUTINE). Em Fortran 77 o escopo é plano — não há blocos aninhados
     dentro de uma unidade, pelo que uma única tabela por unidade é suficiente.
-
-    Para subprogramas (valorização), cada FunctionDef/SubroutineDef terá a
-    sua própria instância de SymbolTable.
     """
 
     def __init__(self, unit_name: str):
@@ -130,7 +111,7 @@ class SymbolTable:
 
 class Visitor:
     """
-    Visitor genérico. Despacha visit(node) para visit_<NomeClasse>(node).
+    Despacha visit(node) para visit_<NomeClasse>(node).
     Se não existir método específico, chama generic_visit que percorre
     os filhos por omissão.
 
